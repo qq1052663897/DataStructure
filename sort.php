@@ -102,14 +102,12 @@ class Sort {
         $j = $next['start'];
         $temp = [];
         print_r($prev);print_r($next);
-        for (; $i <= $prev['end']; $i++) {
-            if ($array[$i] < $array[$j]) {
-                $temp[] = $array[$i];
+        while ($i <= $prev['end'] && $j <= $next['end']) {
+            if ($array[$i] > $array[$j]) {
+                $temp[] = $array[$i++];
             } else {
-                $temp[] = $array[$j];
-                $j++;
+                $temp[] = $array[$j++];
             }
-            if ($j == $next['end']) break;
         }
 
         if ($i <= $prev['end']) {
