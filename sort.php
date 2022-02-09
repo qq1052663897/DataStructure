@@ -96,7 +96,7 @@ class Sort {
         $this->doMergeSort($array, ['start' => $start, 'end' => $middle], ['start' => $middle + 1, 'end' => $end]);
     }
 
-    private function doMergeSort(&$array, array $prev, array $next)
+    private function doMergeSort(array &$array, array $prev, array $next)
     {
         $i = $prev['start'];
         $j = $next['start'];
@@ -129,11 +129,53 @@ class Sort {
         }
     }
 
+    /**
+     * @param array $array
+     * @return array
+     */
+    public function quickSort(array $array) : array
+    {
+        $count = count($array);
+        if ($count <= 1) return $array;
+        $this->doQuickGroup($array, 0, $count-1);
+        return $array;
+    }
+
+    private function doQuickGroup(array &$array, int $start, int $end)
+    {
+        if ($start >= $end) return;
+
+        $index = $this->doQuickSort($array, $start, $end);
+        $this->doQuickGroup($array, $start, $index-1);
+        $this->doQuickGroup($array, $index+1, $end);
+    }
+
+    private function doQuickSort(array &$array, int $start, int $end) : int
+    {
+        $pivot = $array[$end];
+        $i = $start;
+
+        for ($j = $start; $j < $end; $j++) {
+            if ($array[$j] < $pivot) {
+                $temp = $array[$j];
+                $array[$j] = $array[$i];
+                $array[$i] = $temp;
+                $i++;
+            }
+        }
+
+        $temp = $pivot;
+        $array[$end] = $array[$i];
+        $array[$i] = $temp;
+
+        return $i;
+    }
+
 }
 
 /**********************************************************************************************************************/
 
 $array = [4, 5, 7, 6, 8, 3, 0, 2, 9, 1];
 $client = new Sort();
-$result = $client->mergeSort($array);
+$result = $client->quickSort($array);
 print_r($result);
